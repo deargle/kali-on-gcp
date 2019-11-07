@@ -1,0 +1,3 @@
+templates/kali-*
+packer_cache/
+account.json
