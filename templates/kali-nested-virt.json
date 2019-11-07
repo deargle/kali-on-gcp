@@ -1,0 +1,16 @@
+{
+	"builders": [
+		{
+			"type": "googlecompute",
+			"account_file": "{{template_dir}}/../account.json",
+			"project_id": "",
+			"source_image_family": "kali-rolling-gcpized",
+			"image_name": "kali-rolling-nestedvm-{{timestamp}}",
+			"image_family": "kali-rolling-gcpized-nestedvm",
+			"ssh_username": "packer",
+			"disk_size": "20",
+			"zone": "us-central1-a",
+			"image_licenses": ["projects/vm-options/global/licenses/enable-vmx"]
+		}
+	]
+}
