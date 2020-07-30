@@ -19,12 +19,12 @@
 		"boot_command": [
 			"<esc><wait>",
 			"install <wait>",
-			"preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
+			"preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed-2019-3.cfg ",
 			"locale=en_US ",
 			"keymap=us ",
 			"hostname=kali ",
 			"domain='' ",
-			"<enter>"	
+			"<enter>"
 		],
 		"communicator": "ssh",
 		"ssh_username": "root",
@@ -42,7 +42,7 @@
 		"qemuargs": [
 	 		["-m", "4096"],
 			["-smp", "2"],
-			["-display", "gtk"]	
+			["-display", "gtk"]
 		]
 	}],
 	"provisioners": [
@@ -56,7 +56,7 @@
 				"chmod 600 /root/.ssh/authorized_keys",
 				"echo {{user `public_key`}} > /root/.ssh/authorized_keys",
 				"sed -i 's/PermitRootLogin yes/PermitRootLogin without-password/' /etc/ssh/sshd_config"
-			]	
+			]
 		},
 		{
 			"type": "shell",
@@ -113,14 +113,14 @@
 				"sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=.*$/GRUB_CMDLINE_LINUX_DEFAULT=\"\"/' /etc/default/grub",
 				"sed -i 's/GRUB_CMDLINE_LINUX=.*$/GRUB_CMDLINE_LINUX=\"console=tty0 console=ttyS0,38400n8d\"/' /etc/default/grub",
 				"update-grub"
-			]	
+			]
 		}
 	],
 	"post-processors": [
 		[
 			{
 				"type": "compress",
-				"output": "output/disk.raw.tar.gz"	
+				"output": "output/disk.raw.tar.gz"
 			},
 			{
 				"type": "googlecompute-import",
@@ -129,7 +129,7 @@
 				"bucket": "",
 				"image_name": "kali-rolling-{{timestamp}}",
 				"image_family": "kali-rolling-gcpized"
-			}	
+			}
 		]
 	]
 }

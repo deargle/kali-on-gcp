@@ -29,6 +29,25 @@ Then,
 
 	packer build templates/kali.json
 
+# Kali 2020.2 on GCP, libvirt / qemu builder
+
+Fill in required fields in `kali-*.json` and `http/preseed-*.cfg`. Then,
+
+	packer build templates/kali-2020-2.json
+	packer build templates/kali-nested-virt.json
+
+# debugging
+
+	PACKER_LOG=1 packer build -on-error=ask templates/kali-2020-2.json
+
+# A pentesting lab within kali on gcp!
+
+I have some vagrant boxes that have configs that put them on a network so that they
+can be reached by kali, the host. Uses `livbirt` / `virt-manager`. Requires a little
+bit more configuration of kali, instructions forthcoming, can't remember where I put them.
+
+But my vagrant boxes are [here](https://app.vagrantup.com/deargle).
+
 # Todos
 
 * add the nested-virtualization license to the build step
