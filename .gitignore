@@ -1,3 +1,5 @@
 templates/kali-deargle*
 packer_cache/
 account.json
+*/**/.vagrant
+*/**/id_rsa
