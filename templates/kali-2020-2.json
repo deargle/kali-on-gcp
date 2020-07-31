@@ -85,7 +85,7 @@
 				"",
 				"sudo apt install -y google-cloud-packages-archive-keyring",
 				"sudo apt install -y google-compute-engine",
-
+				"",
 				"sudo systemctl enable google-startup-scripts.service",
 				"sudo systemctl enable google-shutdown-scripts.service",
 				"",
