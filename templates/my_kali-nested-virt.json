@@ -3,7 +3,7 @@
 		{
 			"type": "googlecompute",
 			"account_file": "{{template_dir}}/../account.json",
-			"project_id": "REPLACE_ME",
+			"project_id": "deargle-infosec-private",
 			"source_image_family": "kali-rolling-gcpized",
 			"image_name": "kali-rolling-nestedvm-{{timestamp}}",
 			"image_family": "kali-rolling-gcpized-nestedvm",
@@ -14,5 +14,10 @@
 		}
 	],
 	"provisioners": [
+		{
+			"type": "shell",
+			"execute_command": "echo 'packer' | sudo -S sh -xc '{{ .Vars }} {{ .Path }}'",
+			"inline": "apt update; apt install -y gce-disk-expand && systemctl enable google-disk-expand"
+		}
 	]
 }

@@ -86,6 +86,7 @@
 				"python-google-compute-engine",
 				"python3-google-compute-engine",
 				"google-compute-engine-oslogin",
+				"gce-disk-expand",
 				"google-compute-engine)",
 				"for pkg in ${PKG_LIST[@]}; do",
 				"  sudo apt install -y ${pkg}",

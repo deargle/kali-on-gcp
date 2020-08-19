@@ -44,9 +44,9 @@ Fill in required fields in `kali-*.json` and `http/preseed-*.cfg`. Then,
 
 I have some vagrant boxes that have configs that put them on a network so that they
 can be reached by kali, the host. Uses `livbirt` / `virt-manager`. Requires a little
-bit more configuration of kali, instructions forthcoming, can't remember where I put them.
+bit more configuration of kali, build script is in the vagrantfile in the [kali-pentest-lab](kali-pentest-lab) folder.
 
-But my vagrant boxes are [here](https://app.vagrantup.com/deargle).
+And my vagrant boxes are [here](https://app.vagrantup.com/deargle).
 
 # Todos
 

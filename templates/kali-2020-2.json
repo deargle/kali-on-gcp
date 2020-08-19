@@ -84,7 +84,7 @@
 				"#https://cloud.google.com/compute/docs/images/install-guest-environment#debian",
 				"",
 				"sudo apt install -y google-cloud-packages-archive-keyring",
-				"sudo apt install -y google-compute-engine",
+				"sudo apt install -y google-compute-engine gce-disk-expand && systemctl enable google-disk-expand",
 				"",
 				"sudo systemctl enable google-startup-scripts.service",
 				"sudo systemctl enable google-shutdown-scripts.service",
