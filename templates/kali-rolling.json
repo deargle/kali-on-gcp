@@ -1,0 +1,82 @@
+{
+	"_comment0": "replace `project_id` and `bucket` in the `googlecompute-import` post-processor to point to a writeable directory within your project. A compressed version of the ",
+	"variables": {
+		"iso_url": "http://old.kali.org/kali-images/kali-2020.2/kali-linux-2020.2-installer-amd64.iso",
+		"iso_checksum_type": "sha256",
+		"iso_checksum": "ae9a3b6a1e016cd464ca31ef5055506cecfc55a10f61bf1acb8313eddbe12ad7",
+		"public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSTmN2oPZWOro5WhEdNKRFJNOAR01be4leEHnN38WYz8LVtyIt15iKRrChJZEZ4UhvsX2F91W/K7iYRGmu0tFhIUQceT/6bDT+gQ/I5oXUDaV3kNK5J+4fZpKe5bMg8wRNmKHz/nIzGFabQqyv01O7wyaNs2JWl/nUAnhWiEUYs5LCc+E/WWKvFNVbriDKA8z0cougxSj20yNK43ZXOGbA31cUw4QxuiOC3xe8MUrr1B58mZYbtbRckKtVmY3SLrONF97R8+E/XcA0/nGH28xp3WfvL99yHlclnwu/NwU+80N9v7PaJjhxjlSv5O4tu32drvAxAjyqfnXvIAU95g3Z deargle@wherever"
+	},
+	"builders": [{
+		"type": "qemu",
+		"iso_url": "{{user `iso_url`}}",
+		"iso_checksum_type": "{{user `iso_checksum_type`}}",
+		"iso_checksum": "{{user `iso_checksum`}}",
+		"headless": false,
+		"http_directory": "{{template_dir}}/../http",
+		"http_port_min": 9001,
+		"http_port_max": 9001,
+		"boot_wait": "3s",
+		"boot_key_interval": "10ms",
+		"boot_command": [
+			"<esc><wait>",
+			"install <wait>",
+			"preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed-2020-2.cfg ",
+			"locale=en_US ",
+			"keymap=us ",
+			"hostname=kali ",
+			"domain='' ",
+			"<enter>"
+		],
+		"communicator": "ssh",
+		"ssh_username": "root",
+		"ssh_password": "toor",
+		"ssh_wait_timeout": "2h",
+		"accelerator": "kvm",
+		"shutdown_command": "echo 'packer' | sudo -S shutdown -P now",
+		"shutdown_timeout": "30m",
+		"vm_name": "disk.raw",
+		"disk_size": 20000,
+		"format": "raw",
+		"net_device": "virtio-net",
+		"disk_interface": "virtio",
+		"output_directory": "output",
+		"qemuargs": [
+	 		["-m", "4096"],
+			["-smp", "2"],
+			["-display", "gtk"]
+		]
+	}],
+	"provisioners": [
+		{
+			"type": "shell",
+			"environment_vars": [
+				"PUBLIC_KEY={{user `public_key`}}"
+			],
+			"script": "{{template_dir}}/../inject-ssh-key.sh"
+		},
+		{
+			"type": "shell",
+			"script": "{{template_dir}}/../install-google-cloud-environment.sh"
+		},
+		{
+			"type": "shell",
+			"script": "{{template_dir}}/../grub-stuff.sh"
+		}
+	],
+	"post-processors": [
+		[
+			{
+				"type": "compress",
+				"output": "output/disk.raw.tar.gz"
+			},
+			{
+				"type": "googlecompute-import",
+				"account_file": "{{template_dir}}/../account.json",
+				"project_id": "REPLACE_ME",
+				"bucket": "REPLACE_ME",
+				"image_name": "kali-rolling-{{timestamp}}",
+				"image_family": "kali-rolling-gcpized"
+			}
+		]
+	]
+}
