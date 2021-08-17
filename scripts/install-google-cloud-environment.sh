@@ -30,16 +30,15 @@ sudo systemctl enable google-shutdown-scripts.service
 
 # Downgrade opensshd (client and server) to match versions on OOB debian 10 gcp instance, and regenerate host keys
 
-wget http://ftp.us.debian.org/debian/pool/main/o/openssh/openssh-client_7.9p1-10+deb10u2_amd64.deb
-dpkg --force-confold -i openssh-client_7.9p1-10+deb10u2_amd64.deb
-
-wget http://ftp.us.debian.org/debian/pool/main/o/openssh/openssh-sftp-server_7.9p1-10+deb10u2_amd64.deb
-dpkg -i openssh-sftp-server_7.9p1-10+deb10u2_amd64.deb
-
-wget http://ftp.us.debian.org/debian/pool/main/o/openssh/openssh-server_7.9p1-10+deb10u2_amd64.deb
-rm -r /etc/ssh/ssh_host*
-rm /etc/ssh/sshd_config
-UCF_FORCE_CONFFMISS=1 dpkg --force-confmiss -i openssh-server_7.9p1-10+deb10u2_amd64.deb
-service ssh start
-service ssh reload
-"
+# wget http://ftp.us.debian.org/debian/pool/main/o/openssh/openssh-client_7.9p1-10+deb10u2_amd64.deb
+# dpkg --force-confold -i openssh-client_7.9p1-10+deb10u2_amd64.deb
+# 
+# wget http://ftp.us.debian.org/debian/pool/main/o/openssh/openssh-sftp-server_7.9p1-10+deb10u2_amd64.deb
+# dpkg -i openssh-sftp-server_7.9p1-10+deb10u2_amd64.deb
+# 
+# wget http://ftp.us.debian.org/debian/pool/main/o/openssh/openssh-server_7.9p1-10+deb10u2_amd64.deb
+# rm -r /etc/ssh/ssh_host*
+# rm /etc/ssh/sshd_config
+# UCF_FORCE_CONFFMISS=1 dpkg --force-confmiss -i openssh-server_7.9p1-10+deb10u2_amd64.deb
+# service ssh start
+# service ssh reload

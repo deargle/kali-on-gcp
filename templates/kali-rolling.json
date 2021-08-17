@@ -1,9 +1,9 @@
 {
 	"_comment0": "replace `project_id` and `bucket` in the `googlecompute-import` post-processor to point to a writeable directory within your project. A compressed version of the ",
 	"variables": {
-		"iso_url": "http://old.kali.org/kali-images/kali-2020.2/kali-linux-2020.2-installer-amd64.iso",
+		"iso_url": "https://cdimage.kali.org/kali-2021.2/kali-linux-2021.2-live-amd64.iso",
 		"iso_checksum_type": "sha256",
-		"iso_checksum": "ae9a3b6a1e016cd464ca31ef5055506cecfc55a10f61bf1acb8313eddbe12ad7",
+		"iso_checksum": "a6e11071179f5c3a8c5195123b505f0d991a5c845d22bcba0f4355be69c6d9e8",
 		"public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSTmN2oPZWOro5WhEdNKRFJNOAR01be4leEHnN38WYz8LVtyIt15iKRrChJZEZ4UhvsX2F91W/K7iYRGmu0tFhIUQceT/6bDT+gQ/I5oXUDaV3kNK5J+4fZpKe5bMg8wRNmKHz/nIzGFabQqyv01O7wyaNs2JWl/nUAnhWiEUYs5LCc+E/WWKvFNVbriDKA8z0cougxSj20yNK43ZXOGbA31cUw4QxuiOC3xe8MUrr1B58mZYbtbRckKtVmY3SLrONF97R8+E/XcA0/nGH28xp3WfvL99yHlclnwu/NwU+80N9v7PaJjhxjlSv5O4tu32drvAxAjyqfnXvIAU95g3Z deargle@wherever"
 	},
 	"builders": [{
@@ -20,7 +20,7 @@
 		"boot_command": [
 			"<esc><wait>",
 			"install <wait>",
-			"preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed-2020-2.cfg ",
+			"preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/kali-linux-rolling-preseed.cfg ",
 			"locale=en_US ",
 			"keymap=us ",
 			"hostname=kali ",
@@ -52,15 +52,15 @@
 			"environment_vars": [
 				"PUBLIC_KEY={{user `public_key`}}"
 			],
-			"script": "{{template_dir}}/../inject-ssh-key.sh"
+			"script": "{{template_dir}}/../scripts/inject-ssh-key.sh"
 		},
 		{
 			"type": "shell",
-			"script": "{{template_dir}}/../install-google-cloud-environment.sh"
+			"script": "{{template_dir}}/../scripts/install-google-cloud-environment.sh"
 		},
 		{
 			"type": "shell",
-			"script": "{{template_dir}}/../grub-stuff.sh"
+			"script": "{{template_dir}}/../scripts/grub-stuff.sh"
 		}
 	],
 	"post-processors": [

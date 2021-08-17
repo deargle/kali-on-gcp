@@ -3,7 +3,7 @@
 		{
 			"type": "googlecompute",
 			"account_file": "{{template_dir}}/../account.json",
-			"project_id": "REPLACE_ME",
+			"project_id": "<REPLACE_ME>",
 			"source_image_family": "kali-rolling-gcpized",
 			"image_name": "kali-rolling-nestedvm-{{timestamp}}",
 			"image_family": "kali-rolling-gcpized-nestedvm",
