@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 # https://programmaticponderings.com/2013/12/19/scripting-linux-swap-space/
 
 # does the swap file already exist?
