@@ -20,7 +20,7 @@ It works like this:
   and then run a `gcloud` "image import" script, which creates a gcp "image"
 * Optionally, a second packer script (`templates/kali-nested-virt.json`) creates a
   new image based on the first, adding licenses which enable nested virtualization
-	within Kali on GCP.
+  within Kali on GCP.
 
 
 ## Before you build
@@ -43,43 +43,47 @@ do its thing.
 on a gcp image. Either method described in that document requires using `gcloud`. You could run that from
 a [gcp cloud shell](https://cloud.google.com/shell) to avoid having to configure your local machine.
 
-  For instance, to create an instance named "packer-builder" with nested virtualization enabled, from which to create Kali:
+   For instance, to create an instance named "packer-builder" with nested virtualization enabled, from which to create Kali:
 
-  		gcloud compute instances create packer-builder \
-  			--enable-nested-virtualization \
-  			--zone=us-central1-a \
-  			--min-cpu-platform="Intel Haswell" \
-  			--machine-type="n1-standard-8" \
-  			--boot-disk-size=100GB \
-  			--image-family="debian-10"
-
-
-2. ssh to the instance using gcp's ssh-in-the-browser. Then, run the following
-   to install virtualization packages into the instance:
-
-  		sudo apt update -y && sudo apt install -y git software-properties-common
+   ```
+   gcloud compute instances create packer-builder \
+     --enable-nested-virtualization \
+     --zone=us-central1-a \
+     --min-cpu-platform="Intel Haswell" \
+     --machine-type="n1-standard-8" \
+     --boot-disk-size=100GB \
+     --image-family="debian-10"
+    ```
 
 
+2.  ssh to the instance using gcp's ssh-in-the-browser. Then, run the following
+    to install virtualization packages into the instance:
 
-  		# install packer
+    ```
+    sudo apt update -y && sudo apt install -y git software-properties-common
 
-  		curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-  		sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-  		sudo apt-get update && sudo apt-get install packer
+    # install packer
 
-  		# Install qemu-kvm & libvirt packages
+    curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+    sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+    sudo apt-get update && sudo apt-get install packer
 
-  		sudo apt install qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils virtinst libvirt-daemon virt-manager -y
+    # Install qemu-kvm & libvirt packages
+
+    sudo apt install qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils virtinst libvirt-daemon virt-manager -y
 
 
-  		# Install some gtk stuff, idk, found it on https://github.com/sickcodes/Docker-OSX/issues/7
+    # Install some gtk stuff, idk, found it on https://github.com/sickcodes/Docker-OSX/issues/7
 
-  		sudo apt install x11-sxerver-utils
-  		xhost +
+    sudo apt install x11-sxerver-utils
+    xhost +
+  ```
 
-3. Next, check out this repository to your gcp instance:
+3.  Next, check out this repository to your gcp instance:
 
-  		git clone https://github.com/deargle/kali-on-gcp && cd kali-on-gcp
+    ```
+    git clone https://github.com/deargle/kali-on-gcp && cd kali-on-gcp
+    ```
 
 4. Then, proceed below to customize settings, then build with packer.
 
@@ -88,28 +92,32 @@ a [gcp cloud shell](https://cloud.google.com/shell) to avoid having to configure
 You need to customize a few things in the `templates/kali-*.json` files:
 
 * Configure the googlecompute-import provisioner.
-	* add your gcp bucket name
-		* You'll also need to actually create the bucket on gcp that you specify in the user vars.
-	* add your project id
-	* add the filename to a gcp service account private key file that has access to create images, access gcp buckets, etc. This repo assumes a service
-		keyfile named `account.json` in the root of this repository.
-		* see [how to create a gcp service account and get a private key file for it](#)
+  * add your gcp bucket name
+    * You'll also need to actually create the bucket on gcp that you specify in the user vars.
+  * add your project id
+  * add the filename to a gcp service account private key file that has access to create images, access gcp buckets, etc. This repo assumes a service
+    keyfile named `account.json` in the root of this repository.
+    * see [how to create a gcp service account and get a private key file for it](#)
 * Specify a public ssh key -- this will be put into `/root/.ssh/authorized_keys`. ssh login with ssh key is permitted for root on this build.
-	* **This means that if you use my prebuilt images, I can in theory ssh in as root to your kali instance via your instance's public ip address (if any).**
+  * **This means that if you use my prebuilt images, I can in theory ssh in as root to your kali instance via your instance's public ip address (if any).**
 
-		If you're not comfortable with this, you can build your own Kali image, setting
-		your own ssh key.
+    If you're not comfortable with this, you can build your own Kali image, setting
+    your own ssh key.
 
 
 ## Building
 
 Once you have customized the packer template file, run the following command to build kali.
 
-		packer build templates/kali-rolling.json
+```.terminal
+$ packer build templates/kali-rolling.json
+```
 
 Or, with more verbose output:
 
-		sudo PACKER_LOG=1 packer build --on-error=ask templates/kali-rolling.json
+```.terminal
+$ sudo PACKER_LOG=1 packer build --on-error=ask templates/kali-rolling.json
+```
 
 ## Optional: create a version with nested virtualization enabled
 
@@ -121,7 +129,9 @@ to the kali gcp image ultimately created in the previous packer-build step.
 
 Then,
 
-		packer build templates/kali-nested-virt.json
+```.terminal
+$ packer build templates/kali-nested-virt.json
+```
 
 
 ### Historical: Customizations that were necessary for Kali Rolling 2019.3
@@ -135,10 +145,10 @@ extra package installations are required to get GCP onto Kali 2019.3
 
 * install libjson-c3 -- required by google-compute-instance debian packages
 * install stretch versions of openssh-client and openssh-server, and regenrate openssh-server host keys.
-	* 	Without this, ssh-in-the-browser (the `ssh` button in GCP) does not work. But, regular ssh does work. From my debugging,
-		I saw that the ssh client (ssh in the browser) was disconnecting after the kali openssh-server sent its host keys. Internet
-		suggests that at this point, the client would be told that it cannot verify the authenticity of the server, do you want to continue,
-		etc, but shrug. Downgrading and regenerating worked on a moonshot.
+  *   Without this, ssh-in-the-browser (the `ssh` button in GCP) does not work. But, regular ssh does work. From my debugging,
+    I saw that the ssh client (ssh in the browser) was disconnecting after the kali openssh-server sent its host keys. Internet
+    suggests that at this point, the client would be told that it cannot verify the authenticity of the server, do you want to continue,
+    etc, but shrug. Downgrading and regenerating worked on a moonshot.
 * remove `/etc/hostname` so that the hostname can be dynamically set by gcp to whatever the instance name is
 
 
