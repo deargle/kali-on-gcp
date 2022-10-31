@@ -77,7 +77,7 @@ a [gcp cloud shell](https://cloud.google.com/shell) to avoid having to configure
 
     sudo apt install x11-sxerver-utils
     xhost +
-  ```
+    ```
 
 3.  Next, check out this repository to your gcp instance:
 
